@@ -1,0 +1,27 @@
+from gpiozero import Servo
+from time import sleep #bekleme süresi ekleyenilirsiniz
+import keyboard
+
+#servoyu 18e bağlıyorum yine
+SERVO_PIN = 18
+servo = Servo(SERVO_PIN)
+
+angle = 0 
+MAX_ANGLE = 1
+MIN_ANGLE = -1 
+
+def angle_to_pwm(angle):
+    return (angle / 90) * (MAX_ANGLE - MIN_ANGLE) + MIN_ANGLE
+
+try:
+    print("Klavye kontrolleri")
+    print("A tuşuna basarak servoyu çalıştırın")
+    
+    while True:
+        if keyboard.is_pressed('a'): #a yı değiştirebilirsiniz herhangi bir tuşla
+            angle = min(angle + 20, 180)
+            servo.value = angle_to_pwm(angle)  
+            print(f"Açı: {angle}°")
+            sleep(0.5)  #bu sefer bekleme süresi koyuyom silersebiz seri basabilirsiniz tuşa ama sıfırlama olmadığı için sürekli 20 derece döner başa sarmaz 
+except KeyboardInterrupt:
+    print("çalışma bitti")
